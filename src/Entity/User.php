@@ -37,13 +37,19 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\OneToMany(targetEntity=Article::class, mappedBy="user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Entry::class, mappedBy="user", orphanRemoval=true)
      */
-    private $articles;
+    private $entries;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Task::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $tasks;
 
     public function __construct()
     {
-        $this->articles = new ArrayCollection();
+        $this->entries = new ArrayCollection();
+        $this->tasks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -122,38 +128,68 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    /**
-     * @return Collection|Article[]
-     */
-    public function getArticles(): Collection
+    public function __toString()
     {
-        return $this->articles;
+        return $this->getUsername();
     }
 
-    public function addArticle(Article $article): self
+    /**
+     * @return Collection|Entry[]
+     */
+    public function getEntries(): Collection
     {
-        if (!$this->articles->contains($article)) {
-            $this->articles[] = $article;
-            $article->setUser($this);
+        return $this->entries;
+    }
+
+    public function addEntry(Entry $entry): self
+    {
+        if (!$this->entries->contains($entry)) {
+            $this->entries[] = $entry;
+            $entry->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeArticle(Article $article): self
+    public function removeEntry(Entry $entry): self
     {
-        if ($this->articles->removeElement($article)) {
+        if ($this->entries->removeElement($entry)) {
             // set the owning side to null (unless already changed)
-            if ($article->getUser() === $this) {
-                $article->setUser(null);
+            if ($entry->getUser() === $this) {
+                $entry->setUser(null);
             }
         }
 
         return $this;
     }
 
-    public function __toString()
+    /**
+     * @return Collection|Task[]
+     */
+    public function getTasks(): Collection
     {
-        return $this->getUsername();
+        return $this->tasks;
+    }
+
+    public function addTask(Task $task): self
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks[] = $task;
+            $task->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): self
+    {
+        if ($this->tasks->removeElement($task)) {
+            // set the owning side to null (unless already changed)
+            if ($task->getUser() === $this) {
+                $task->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

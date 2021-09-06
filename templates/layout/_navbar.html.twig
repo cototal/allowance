@@ -8,13 +8,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path("article_index") }}">Articles</a>
+                    <a class="nav-link" href="{{ path("entry_index") }}">Entries</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="{{ path("task_index") }}">Tasks</a>
                 </li>
             </ul>
             <ul class="navbar-nav ms-auto">
-                {#
                 {% if app.user %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path("app_logout") }}">Log Out</a>
@@ -24,7 +24,6 @@
                         <a class="nav-link" href="{{ path("app_login") }}">Log In</a>
                     </li>
                 {% endif %}
-                #}
             </ul>
         </div>
     </div>

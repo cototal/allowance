@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Entries{% endblock %}
+
+{% block body %}
+    <h1>Entries</h1>
+    <a href="{{ path('entry_new') }}">Create new</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Notes</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entry in entries %}
+            <tr>
+                <td><a href="{{ path('entry_show', {'id': entry.id}) }}">{{ entry.notes }}</a></td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <a class="btn btn-outline-dark" href="{{ path('entry_edit', {'id': entry.id}) }}">Edit</a>
+                        {{ include("entry/_delete_link.html.twig", {entry: entry}) }}
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

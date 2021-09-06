@@ -2,27 +2,28 @@
 
 namespace App\Form;
 
-use App\Entity\Article;
+use App\Entity\Task;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ArticleType extends AbstractType
+class TaskType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add("title")
-            ->add("content")
-            ->add("publishAt")
-            ->add("user")
+            ->add('goal')
+            ->add('reward')
+            ->add('days')
+            ->add('complete')
+            ->add('user')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            "data_class" => Article::class,
+            'data_class' => Task::class,
         ]);
     }
 }

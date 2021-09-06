@@ -1,0 +1,4 @@
+<a class="btn btn-outline-danger"
+   data-method="DELETE"
+   href="{{ path("entry_delete", {id: entry.id, _token: csrf_token("delete"~entry.id)}) }}"
+   data-return-to="{{ path("entry_index") }}">Delete</a>

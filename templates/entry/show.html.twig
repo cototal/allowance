@@ -1,11 +1,40 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ entry.notes }}{% endblock %}
+{% block title %}Allowance Entry{% endblock %}
 
 {% block body %}
-    <div class="row mt-4">
-        <div class="col-md-4 mb-4">
-            <h1>{{ entry.notes }}</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table table-striped mt-4">
+                <tr>
+                    <th>User</th>
+                    <td>{{ entry.user }}</td>
+                </tr>
+                <tr>
+                    <th>Entry Date</th>
+                    <td>{{ entry.entryDate | date("Y-m-d") }}</td>
+                </tr>
+                <tr>
+                    <th>Price</th>
+                    <td>{{ entry.price | number_format(2) }}</td>
+                </tr>
+                <tr>
+                    <th>Payee</th>
+                    <td>{{ entry.payee }}</td>
+                </tr>
+                <tr>
+                    <th>Category</th>
+                    <td>{{ entry.category }}</td>
+                </tr>
+                <tr>
+                    <th>Notes</th>
+                    <td>{{ entry.notes }}</td>
+                </tr>
+            </table>
+            <div class="btn-group">
+                <a class="btn btn-outline-dark" href="{{ path('entry_edit', {'id': entry.id}) }}">Edit</a>
+                {{ include("entry/_delete_link.html.twig", {entry: entry}) }}
+            </div>
         </div>
     </div>
 {% endblock %}

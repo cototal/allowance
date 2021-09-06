@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Entry;
 use App\Entity\User;
+use App\Utils\GeneralUtils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -18,6 +19,42 @@ class EntryRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Entry::class);
+    }
+
+    public function searchQuery(?array $query)
+    {
+        $qb = $this->createQueryBuilder("entry")
+            ->join("entry.user", "user")
+            ->addSelect("user");
+
+        if (empty($query)) {
+            return $qb;
+        }
+
+        if (!GeneralUtils::emptyKeyValue("userEquals", $query)) {
+            $qb->andWhere("user.id = :userId")
+                ->setParameter("userId", $query["userEquals"]);
+        }
+
+        foreach (["category", "payee", "notes"] as $field) {
+            $value = '%' . $query["${field}Contains"] . '%';
+            if (!GeneralUtils::emptyKeyValue("${field}Contains", $query)) {
+                $qb->andWhere("entry.$field LIKE :$field")
+                    ->setParameter($field, $value);
+            }
+        }
+
+        if (!GeneralUtils::emptyKeyValue("dateFrom", $query)) {
+            $qb->andWhere("entry.entryDate >= :dateFrom")
+                ->setParameter("dateFrom", $query["dateFrom"]);
+        }
+
+        if (!GeneralUtils::emptyKeyValue("dateTo", $query)) {
+            $qb->andWhere("entry.entryDate <= :dateTo")
+                ->setParameter("dateTo", $query["dateTo"]);
+        }
+
+        return $qb;
     }
 
     public function balance(User $user)

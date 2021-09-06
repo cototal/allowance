@@ -22,7 +22,7 @@ class TaskService
      * @param Task $task
      * @return Entry|null
      */
-    public function payUp(Task $task)
+    public function payOut(Task $task)
     {
         if (count($task->getDays()) <= 3) {
             $task->setDays([]);

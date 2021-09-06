@@ -5,5 +5,17 @@
 {% block body %}
     <h1>Edit Task</h1>
 
-    {{ include('entry/_form.html.twig', {button_label: 'Update'}) }}
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_row(form.days) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_row(form.goal) }}
+            {{ form_row(form.reward) }}
+        </div>
+    </div>
+    <button class="mt-4 btn btn-primary">Update</button>
+    {{ form_end(form) }}
+
 {% endblock %}

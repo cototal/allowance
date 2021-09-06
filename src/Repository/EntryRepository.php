@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Entry;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,32 +20,39 @@ class EntryRepository extends ServiceEntityRepository
         parent::__construct($registry, Entry::class);
     }
 
-    // /**
-    //  * @return Entry[] Returns an array of Entry objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function balance(User $user)
     {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('e.id', 'ASC')
-            ->setMaxResults(10)
+        $total = $this->createQueryBuilder("entry")
+            ->select("SUM(entry.price)")
+            ->andWhere("entry.user = :user")
+            ->setParameter("user", $user)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getSingleScalarResult();
+        if (is_null($total)) {
+            return 0;
+        }
+        return floatval($total);
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Entry
+    public function monthlySpending(User $user, \DateTimeInterface $date)
     {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
+        $firstString = $date->format("Y-m-01 00:00");
+        // 't' gets the number of days in a month
+        $lastString = $date->format("Y-m-t 23:59");
+        $first = \DateTimeImmutable::createFromFormat("Y-m-d H:i", $firstString);
+        $last = \DateTimeImmutable::createFromFormat("Y-m-d H:i", $lastString);
+        $total = $this->createQueryBuilder("entry")
+            ->select("SUM(entry.price)")
+            ->andWhere("entry.user = :user")
+            ->andWhere("entry.entryDate >= :first AND entry.entryDate <= :last")
+            ->setParameter("user", $user)
+            ->setParameter("first", $first)
+            ->setParameter("last", $last)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getSingleScalarResult();
+        if (is_null($total)) {
+            return 0;
+        }
+        return floatval($total);
     }
-    */
 }

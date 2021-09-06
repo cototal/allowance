@@ -1,3 +1,4 @@
 psysh:
   variables:
     em: '@doctrine.orm.default_entity_manager'
+    ts: '@App\Service\TaskService'

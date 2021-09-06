@@ -65,13 +65,16 @@ class Entry
         return $this;
     }
 
-    public function getEntryDate(): ?\DateTimeImmutable
+    public function getEntryDate(): ?\DateTimeInterface
     {
         return $this->entryDate;
     }
 
-    public function setEntryDate(\DateTimeImmutable $entryDate): self
+    public function setEntryDate(\DateTimeInterface $entryDate): self
     {
+        if ($entryDate instanceof \DateTime) {
+            $entryDate = \DateTimeImmutable::createFromMutable($entryDate);
+        }
         $this->entryDate = $entryDate;
 
         return $this;

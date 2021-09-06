@@ -41,7 +41,7 @@ class Task
     /**
      * @ORM\Column(type="boolean")
      */
-    private $complete;
+    private $complete = false;
 
     public function getId(): ?int
     {

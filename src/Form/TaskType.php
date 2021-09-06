@@ -12,18 +12,15 @@ class TaskType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('goal')
-            ->add('reward')
-            ->add('days')
-            ->add('complete')
-            ->add('user')
+            ->add("goal")
+            ->add("reward")
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Task::class,
+            "data_class" => Task::class,
         ]);
     }
 }

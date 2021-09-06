@@ -46,6 +46,7 @@ class EntryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $entry->setUser($this->getUser());
             $this->em->persist($entry);
             $this->em->flush();
 

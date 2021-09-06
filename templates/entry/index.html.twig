@@ -3,8 +3,48 @@
 {% block title %}Entries{% endblock %}
 
 {% block body %}
-    <h1>Entries</h1>
-    <a href="{{ path('entry_new') }}">Create new</a>
+    <h1 class="mt-4">
+        Entries
+        <a class="btn btn-outline-primary" href="{{ path('entry_new') }}">Create new</a>
+    </h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_start(searchForm) }}
+            <fieldset>
+                <legend>Search Entries</legend>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(searchForm.userEquals) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(searchForm.categoryContains) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(searchForm.payeeContains) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(searchForm.notesContains) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(searchForm.dateFrom) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(searchForm.dateTo) }}
+                </div>
+            </div>
+            <button class="mt-4 btn btn-primary">{{ button_label|default('Search') }}</button>
+            </fieldset>
+            {{ form_end(searchForm) }}
+        </div>
+        <div class="col-md-6">
+
+        </div>
+    </div>
 
     <table class="table">
         <thead>

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Entry;
+use App\Form\EntrySearchType;
 use App\Form\EntryType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,13 +27,17 @@ class EntryController extends AbstractController
     }
 
     /**
-     * @Route("/", name="entry_index", methods={"GET"})
+     * @Route("", name="entry_index", methods={"GET"})
      */
     public function index(): Response
     {
         $entries = $this->em->getRepository(Entry::class)->findBy([]);
+        $searchForm = $this->createForm(EntrySearchType::class, [], [
+            "method" => "GET"
+        ]);
         return $this->render('entry/index.html.twig', [
-            'entries' => $entries
+            'entries' => $entries,
+            "searchForm" => $searchForm->createView()
         ]);
     }
 

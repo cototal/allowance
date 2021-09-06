@@ -1,0 +1,7 @@
+vendor/
+var/
+node_modules/
+.env.*
+public/build/
+data/
+.git/

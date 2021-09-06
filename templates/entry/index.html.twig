@@ -42,23 +42,46 @@
             {{ form_end(searchForm) }}
         </div>
         <div class="col-md-6">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th>Balance</th>
+                        <td>${{ balance | number_format(2) }}</td>
+                    </tr>
+                    <tr>
+                        <th>Spending for {{ date() | date("F") }}</th>
+                        <td>${{ monthlySpending | number_format(2) }}</td>
+                    </tr>
+                </tbody>
+            </table>
 
         </div>
     </div>
 
-    <table class="table">
+    <table class="table table-striped">
         <thead>
             <tr>
+                <th>User</th>
+                <th>Date</th>
+                <th>Price</th>
+                <th>Payee</th>
+                <th>Category</th>
                 <th>Notes</th>
-                <th>actions</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
         {% for entry in entries %}
             <tr>
-                <td><a href="{{ path('entry_show', {'id': entry.id}) }}">{{ entry.notes }}</a></td>
+                <td>{{ entry.user | title }}</td>
+                <td>{{ entry.entryDate | date("Y-m-d") }}</td>
+                <td>${{ entry.price | number_format(2) }}</td>
+                <td>{{ entry.payee }}</td>
+                <td>{{ entry.category }}</td>
+                <td>{{ entry.notes | u.truncate(20, "...") }}</td>
                 <td>
                     <div class="btn-group btn-group-sm">
+                        <a class="btn btn-outline-primary" href="{{ path('entry_show', {'id': entry.id}) }}">Details</a>
                         <a class="btn btn-outline-dark" href="{{ path('entry_edit', {'id': entry.id}) }}">Edit</a>
                         {{ include("entry/_delete_link.html.twig", {entry: entry}) }}
                     </div>

@@ -35,9 +35,14 @@ class EntryController extends AbstractController
         $searchForm = $this->createForm(EntrySearchType::class, [], [
             "method" => "GET"
         ]);
+        $balance = $this->em->getRepository(Entry::class)->balance($this->getUser());
+        $monthlySpending = $this->em->getRepository(Entry::class)->monthlySpending($this->getUser(), new \DateTime());
+        $monthlySpending = max([$monthlySpending, 0]);
         return $this->render('entry/index.html.twig', [
             'entries' => $entries,
-            "searchForm" => $searchForm->createView()
+            "searchForm" => $searchForm->createView(),
+            "balance" => $balance,
+            "monthlySpending" => $monthlySpending
         ]);
     }
 

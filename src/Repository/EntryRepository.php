@@ -31,7 +31,7 @@ class EntryRepository extends ServiceEntityRepository
         if (is_null($total)) {
             return 0;
         }
-        return floatval($total);
+        return -floatval($total);
     }
 
     public function monthlySpending(User $user, \DateTimeInterface $date)

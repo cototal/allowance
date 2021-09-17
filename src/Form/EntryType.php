@@ -21,7 +21,10 @@ class EntryType extends AbstractType
             ->add("price", null, [
                 "required" => true,
                 "html5" => true,
-                "scale" => 2
+                "scale" => 2,
+                "attr" => [
+                    "step" => 0.01
+                ]
             ])
             ->add("payee")
             ->add("category")

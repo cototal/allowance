@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserUpsertCommand extends Command
 {
     protected static $defaultName = 'user:upsert';
-    protected static $defaultDescription = 'Add a short description for your command';
+    protected static $defaultDescription = 'Create or update a user';
     /**
      * @var EntityManagerInterface
      */

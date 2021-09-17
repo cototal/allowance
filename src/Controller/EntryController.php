@@ -44,7 +44,7 @@ class EntryController extends AbstractController
         $searchParams = $request->query->get("entry_search");
         $searchPrefill = $this->searchPrefill($searchParams);
         $query = $this->em->getRepository(Entry::class)
-            ->searchQuery($request->query->get("entry_search"));
+            ->searchQuery($searchParams);
             // ->createQueryBuilder("entry")
             // ->join("entry.user", "user");
         $pagination = $this->paginator->paginate($query, $request->query->getInt("page", 1), 30, [

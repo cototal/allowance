@@ -80,6 +80,7 @@ class EntryRepository extends ServiceEntityRepository
         $last = \DateTimeImmutable::createFromFormat("Y-m-d H:i", $lastString);
         $total = $this->createQueryBuilder("entry")
             ->select("SUM(entry.price)")
+            ->andWhere("entry.price > 0")
             ->andWhere("entry.user = :user")
             ->andWhere("entry.entryDate >= :first AND entry.entryDate <= :last")
             ->setParameter("user", $user)

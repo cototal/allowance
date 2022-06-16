@@ -18,14 +18,8 @@ class UserUpsertCommand extends Command
 {
     protected static $defaultName = 'user:upsert';
     protected static $defaultDescription = 'Create or update a user';
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $passwordEncoder;
+    private ?EntityManagerInterface $em;
+    private ?UserPasswordEncoderInterface $passwordEncoder;
 
     public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder)
     {

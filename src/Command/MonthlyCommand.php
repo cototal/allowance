@@ -17,10 +17,7 @@ class MonthlyCommand extends Command
     protected static $defaultName = 'app:monthly';
     protected static $defaultDescription = 'Add a short description for your command';
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
+    private ?EntityManagerInterface $em;
 
     public function __construct(EntityManagerInterface $em)
     {

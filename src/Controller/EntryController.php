@@ -14,19 +14,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/entry")
- */
+#[Route("/entry")]
 class EntryController extends AbstractController
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-    /**
-     * @var PaginatorInterface
-     */
-    private $paginator;
+    private ?EntityManagerInterface $em;
+    private ?PaginatorInterface $paginator;
 
     public function __construct(EntityManagerInterface $em, PaginatorInterface $paginator)
     {
@@ -34,11 +26,7 @@ class EntryController extends AbstractController
         $this->paginator = $paginator;
     }
 
-    /**
-     * @Route("", name="entry_index", methods={"GET"})
-     * @param Request $request
-     * @return Response
-     */
+    #[Route("", name: "entry_index", methods: ["GET"])]
     public function index(Request $request): Response
     {
         $searchParams = $request->query->get("entry_search");
@@ -67,9 +55,7 @@ class EntryController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/new", name="entry_new", methods={"GET","POST"})
-     */
+    #[Route("/new", name: "entry_new", methods: ["GET", "POST"])]
     public function new(Request $request): Response
     {
         $entry = new Entry();
@@ -90,9 +76,7 @@ class EntryController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="entry_show", methods={"GET"})
-     */
+    #[Route("/{id}", name: "entry_show", methods: ["GET"])]
     public function show(Entry $entry): Response
     {
         return $this->render('entry/show.html.twig', [
@@ -100,9 +84,7 @@ class EntryController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="entry_edit", methods={"GET","POST"})
-     */
+    #[Route("/{id}/edit", name: "entry_edit", methods: ["GET", "POST"])]
     public function edit(Request $request, Entry $entry): Response
     {
         $form = $this->createForm(EntryType::class, $entry);
@@ -120,12 +102,7 @@ class EntryController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="entry_delete", methods={"DELETE"})
-     * @param Request $request
-     * @param Entry $entry
-     * @return Response
-     */
+    #[Route("/{id}", name: "entry_delete", methods: ["DELETE"])]
     public function delete(Request $request, Entry $entry): Response
     {
         if ($this->isCsrfTokenValid("delete" . $entry->getId(), $request->query->get("_token"))) {
@@ -136,7 +113,7 @@ class EntryController extends AbstractController
         return $this->json(null, 204);
     }
 
-    private function searchPrefill($searchParams)
+    private function searchPrefill($searchParams): array
     {
         if (empty($searchParams)) {
             return [];

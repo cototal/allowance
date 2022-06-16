@@ -8,21 +8,14 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class TaskService
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
+    private EntityManagerInterface $em;
 
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }
 
-    /**
-     * @param Task $task
-     * @return Entry|null
-     */
-    public function payOut(Task $task)
+    public function payOut(Task $task): ?Entry
     {
         if (count($task->getDays()) <= 3) {
             $task->setDays([]);

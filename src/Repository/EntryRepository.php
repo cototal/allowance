@@ -6,9 +6,12 @@ use App\Entity\Entry;
 use App\Entity\User;
 use App\Utils\GeneralUtils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
+ * @extends ServiceEntityRepository<Entry>
+ *
  * @method Entry|null find($id, $lockMode = null, $lockVersion = null)
  * @method Entry|null findOneBy(array $criteria, array $orderBy = null)
  * @method Entry[]    findAll()
@@ -21,7 +24,25 @@ class EntryRepository extends ServiceEntityRepository
         parent::__construct($registry, Entry::class);
     }
 
-    public function searchQuery(?array $query)
+    public function add(Entry $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(Entry $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function searchQuery(?array $query): QueryBuilder
     {
         $qb = $this->createQueryBuilder("entry")
             ->join("entry.user", "user")
@@ -57,7 +78,7 @@ class EntryRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function balance(User $user)
+    public function balance(User $user): float
     {
         $total = $this->createQueryBuilder("entry")
             ->select("SUM(entry.price)")
@@ -71,7 +92,7 @@ class EntryRepository extends ServiceEntityRepository
         return -floatval($total);
     }
 
-    public function monthlySpending(User $user, \DateTimeInterface $date)
+    public function monthlySpending(User $user, \DateTimeInterface $date): float
     {
         $firstString = $date->format("Y-m-01 00:00");
         // 't' gets the number of days in a month

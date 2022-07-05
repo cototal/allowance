@@ -19,14 +19,8 @@ class TaskCommand extends Command
     protected static $defaultName = 'app:task';
     protected static $defaultDescription = 'Add a short description for your command';
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-    /**
-     * @var TaskService
-     */
-    private $taskService;
+    private ?EntityManagerInterface $em;
+    private ?TaskService $taskService;
 
     public function __construct(EntityManagerInterface $em, TaskService $taskService)
     {

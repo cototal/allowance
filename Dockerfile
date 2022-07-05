@@ -7,7 +7,7 @@ COPY . /app
 RUN npm install && npm run build
 
 # Prepare server
-FROM cototal/php-apache:8-0-9-202108071953-6fbed66
+FROM cototal/php-apache:8-0-20-202206142254-7679ada
 
 
 COPY . /app

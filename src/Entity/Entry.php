@@ -5,64 +5,36 @@ namespace App\Entity;
 use App\Repository\EntryRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=EntryRepository::class)
- */
+#[ORM\Entity(repositoryClass: EntryRepository::class)]
 class Entry
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="entries")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
+    #[ORM\Column(type: 'datetime_immutable')]
+    private ?\DateTimeInterface $entryDate;
 
-    /**
-     * @ORM\Column(type="datetime_immutable")
-     */
-    private $entryDate;
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
+    private ?float $price;
 
-    /**
-     * @ORM\Column(type="decimal", precision=10, scale=2)
-     */
-    private $price;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $payee;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $payee;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $category;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $category;
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $notes;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $notes;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'entries')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
     }
 
     public function getEntryDate(): ?\DateTimeInterface
@@ -72,9 +44,6 @@ class Entry
 
     public function setEntryDate(\DateTimeInterface $entryDate): self
     {
-        if ($entryDate instanceof \DateTime) {
-            $entryDate = \DateTimeImmutable::createFromMutable($entryDate);
-        }
         $this->entryDate = $entryDate;
 
         return $this;
@@ -125,6 +94,17 @@ class Entry
     {
         $this->notes = $notes;
 
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): Entry
+    {
+        $this->user = $user;
         return $this;
     }
 }

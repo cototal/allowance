@@ -16,6 +16,7 @@ class EntryType extends AbstractType
             ->add("entryDate", DateType::class, [
                 "required" => true,
                 "widget" => "single_text",
+                "input" => "datetime_immutable",
                 "html5" => true
             ])
             ->add("price", null, [

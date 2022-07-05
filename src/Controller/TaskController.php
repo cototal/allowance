@@ -11,24 +11,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/task")
- */
+#[Route("/task")]
 class TaskController extends AbstractController
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
+    private ?EntityManagerInterface $em;
 
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }
 
-    /**
-     * @Route("/new", name="task_new", methods={"GET","POST"})
-     */
+    #[Route("/new", name: "task_new", methods: ["GET", "POST"])]
     public function new(Request $request): Response
     {
         if (!$this->getUser()->getTasks()->isEmpty()) {
@@ -53,9 +46,7 @@ class TaskController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="task_edit", methods={"GET","POST"})
-     */
+    #[Route("/{id}/edit", name: "task_edit", methods: ["GET", "POST"])]
     public function edit(Request $request, Task $task): Response
     {
         $form = $this->createForm(TaskUpdateType::class, $task);
@@ -73,12 +64,7 @@ class TaskController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="task_delete", methods={"DELETE"})
-     * @param Request $request
-     * @param Task $task
-     * @return Response
-     */
+    #[Route("/{id}", name: "task_delete", methods: ["DELETE"])]
     public function delete(Request $request, Task $task): Response
     {
         if ($this->isCsrfTokenValid("delete" . $task->getId(), $request->query->get("_token"))) {

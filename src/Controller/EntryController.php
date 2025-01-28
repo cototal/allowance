@@ -12,7 +12,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route("/entry")]
 class EntryController extends AbstractController
@@ -29,7 +29,7 @@ class EntryController extends AbstractController
     #[Route("", name: "entry_index", methods: ["GET"])]
     public function index(Request $request): Response
     {
-        $searchParams = $request->query->get("entry_search");
+        $searchParams = $request->query->all("entry_search");
         $searchPrefill = $this->searchPrefill($searchParams);
         $query = $this->em->getRepository(Entry::class)
             ->searchQuery($searchParams);

@@ -58,8 +58,8 @@ class EntryRepository extends ServiceEntityRepository
         }
 
         foreach (["category", "payee", "notes"] as $field) {
-            $value = '%' . $query["${field}Contains"] . '%';
-            if (!GeneralUtils::emptyKeyValue("${field}Contains", $query)) {
+            $value = '%' . $query[$field."Contains"] . '%';
+            if (!GeneralUtils::emptyKeyValue($field."Contains", $query)) {
                 $qb->andWhere("entry.$field LIKE :$field")
                     ->setParameter($field, $value);
             }

@@ -26,7 +26,7 @@ class TaskService
         $entry = (new Entry())
             ->setUser($task->getUser())
             ->setEntryDate(new \DateTimeImmutable())
-            ->setPayee($task->getUser()->getUsername())
+            ->setPayee($task->getUser()->getUserIdentifier())
             ->setPrice($price)
             ->setCategory("Allowance Task");
         $this->em->persist($entry);

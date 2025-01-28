@@ -40,7 +40,7 @@ class MonthlyCommand extends Command
         foreach ($users as $user) {
             $entry = (new Entry())
                 ->setUser($user)
-                ->setPayee($user->getUsername())
+                ->setPayee($user->getUserIdentifier())
                 ->setCategory("Allowance")
                 ->setPrice(-100)
                 ->setEntryDate(new \DateTimeImmutable());

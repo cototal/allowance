@@ -11,19 +11,19 @@ class Task
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id;
+
+    #[ORM\Column(length: 255)]
+    private ?string $goal;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $goal;
-
-    #[ORM\Column(type: 'string', length: 255)]
-    private $reward;
+    private ?string $reward;
 
     #[ORM\Column(type: 'json')]
-    private $days = [];
+    private array $days = [];
 
     #[ORM\Column(type: 'boolean')]
-    private $complete = false;
+    private bool $complete = false;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tasks')]
     #[ORM\JoinColumn(nullable: false)]

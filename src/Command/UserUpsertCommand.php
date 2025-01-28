@@ -7,25 +7,24 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserUpsertCommand extends Command
 {
     protected static $defaultName = 'user:upsert';
     protected static $defaultDescription = 'Create or update a user';
     private ?EntityManagerInterface $em;
-    private ?UserPasswordEncoderInterface $passwordEncoder;
+    private ?UserPasswordHasherInterface $passwordHasher;
 
-    public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher)
     {
         $this->em = $em;
         parent::__construct();
-        $this->passwordEncoder = $passwordEncoder;
+        $this->passwordHasher = $passwordHasher;
     }
 
     protected function configure(): void
@@ -57,7 +56,7 @@ class UserUpsertCommand extends Command
         $question->setHiddenFallback(false);
         $password = $helper->ask($input, $output, $question);
 
-        $encodedPassword = $this->passwordEncoder->encodePassword($user, $password);
+        $encodedPassword = $this->passwordHasher->hashPassword($user, $password);
         $user->setPassword($encodedPassword);
 
         $this->em->flush();

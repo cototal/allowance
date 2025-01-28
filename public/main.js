@@ -1,6 +1,8 @@
-import $ from "jquery";
+$(() => {
+    $("[data-method]").on("click", ajaxLinkHandler);
+});
 
-export function isEmpty(thing) {
+function isEmpty(thing) {
     if (thing == null) {
         return true;
     }
@@ -16,7 +18,7 @@ export function isEmpty(thing) {
     return false;
 }
 
-export function ajaxLinkHandler(evt) {
+function ajaxLinkHandler(evt) {
     evt.preventDefault();
     const target = evt.target;
     let data = {};

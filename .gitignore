@@ -1,11 +1,8 @@
 .idea/
-
-###> symfony/framework-bundle ###
-/.env.local
-/.env.local.php
-/.env.*.local
-/config/secrets/prod/prod.decrypt.private.php
-/public/bundles/
+.venv/
+__pycache__/
+*.py[cod]
+.env.local
+.env.*.local
 /var/
 /vendor/
-###< symfony/framework-bundle ###

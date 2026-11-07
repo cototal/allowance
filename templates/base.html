@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Allowance{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+</head>
+<body>
+    {% include "layout/_navbar.html" %}
+    <main class="container">
+        {% include "layout/_flash_messages.html" %}
+        {% block body %}{% endblock %}
+    </main>
+    <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}" defer></script>
+</body>
+</html>

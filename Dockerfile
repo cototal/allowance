@@ -1,9 +1,16 @@
-FROM cototal/php-apache:6fbed66
+FROM python:3.12-slim
 
+ENV FLASK_APP=wsgi:app
 ENV APP_ENV=prod
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-COPY . /app
+WORKDIR /app
 
-RUN ln -s /etc/apache2/sites-available/symfony4.conf /etc/apache2/sites-enabled/000-default.conf
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN composer install --optimize-autoloader --no-dev && chown -R www-data:www-data /app
+COPY . .
+
+EXPOSE 8000
+CMD ["sh", "-c", "flask init-db && exec gunicorn --bind 0.0.0.0:8000 wsgi:app"]

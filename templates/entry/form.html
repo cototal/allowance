@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block body %}
+<h1>{{ "Create new Entry" if not entry else "Edit Entry" }}</h1>
+{% for error in errors %}<div class="alert alert-danger">{{ error }}</div>{% endfor %}
+{% set date_value = form_data.get("entryDate", entry.entry_date.strftime("%Y-%m-%d") if entry else "") %}
+{% set price_value = form_data.get("price", entry.price if entry else "") %}
+{% set payee_value = form_data.get("payee", entry.payee if entry else "") %}
+{% set category_value = form_data.get("category", entry.category if entry else "") %}
+{% set notes_value = form_data.get("notes", entry.notes if entry else "") %}
+<form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="mb-3">
+        <label class="form-label" for="entryDate">Entry date</label>
+        <input class="form-control" type="date" id="entryDate" name="entryDate" value="{{ date_value }}" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="price">Price</label>
+        <input class="form-control" type="number" step="0.01" id="price" name="price" value="{{ price_value }}" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="payee">Payee</label>
+        <input class="form-control" id="payee" name="payee" value="{{ payee_value }}">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="category">Category</label>
+        <input class="form-control" id="category" name="category" value="{{ category_value }}">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="notes">Notes</label>
+        <textarea class="form-control" id="notes" name="notes">{{ notes_value or "" }}</textarea>
+    </div>
+    <button class="btn btn-primary mt-2" type="submit">{{ "Update" if entry else "Save" }}</button>
+</form>
+{% endblock %}

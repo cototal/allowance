@@ -2,6 +2,9 @@ vendor/
 var/
 node_modules/
 .env.*
+.env
 public/build/
 data/
 .git/
+__pycache__/
+.venv/

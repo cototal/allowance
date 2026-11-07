@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}Entries{% endblock %}
+{% block body %}
+<h1 class="mt-4">Entries <a class="btn btn-outline-primary" href="{{ url_for('entry_new') }}">New Entry</a></h1>
+{% for error in view_model.search_errors %}<div class="alert alert-danger">{{ error }}</div>{% endfor %}
+<div class="row">
+    <div class="col-md-6">
+        <form method="get" action="{{ url_for('entry_index') }}">
+            <fieldset>
+                <legend>Search Entries</legend>
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label" for="userEquals">User</label>
+                        <select class="form-select" id="userEquals" name="entry_search[userEquals]">
+                            <option value="">All users</option>
+                            {% for user in view_model.users %}
+                                <option value="{{ user.id }}" {% if view_model.selected_user and user.id == view_model.selected_user.id %}selected{% endif %}>{{ user.username|title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% for field, label in [("categoryContains", "Category"), ("payeeContains", "Payee"), ("notesContains", "Notes")] %}
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label" for="{{ field }}">{{ label }}</label>
+                        <input class="form-control" id="{{ field }}" name="entry_search[{{ field }}]" value="{{ view_model.search_params.get(field, '') }}">
+                    </div>
+                    {% endfor %}
+                    {% for field, label in [("dateFrom", "Date from"), ("dateTo", "Date to")] %}
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label" for="{{ field }}">{{ label }}</label>
+                        <input class="form-control" type="date" id="{{ field }}" name="entry_search[{{ field }}]" value="{{ view_model.search_params.get(field, '') }}">
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="btn-group mt-3">
+                    <button class="btn btn-outline-primary">Search</button>
+                    <a class="btn btn-outline-dark" href="{{ url_for('entry_index') }}">Clear</a>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <table class="table table-bordered">
+            <tbody>
+                <tr><th>Balance</th><td>${{ "%.2f"|format(view_model.balance) }}</td></tr>
+                <tr><th>Spending for {{ now.strftime("%B") }}</th><td>${{ "%.2f"|format(view_model.monthly_spending) }}</td></tr>
+            </tbody>
+        </table>
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Allowance Task</h3>
+                {% if not view_model.task %}
+                    <a href="{{ url_for('task_new') }}">Set an allowance task</a>
+                {% else %}
+                    <ul class="list-unstyled">
+                        <li><b>{{ view_model.task.goal }}</b></li>
+                        <li>{{ view_model.task.reward }}</li>
+                        <li>
+                            <div class="btn-group mt-2">
+                                <a class="btn btn-outline-primary" href="{{ url_for('task_edit', task_id=view_model.task.id) }}">Update</a>
+                                <form method="post" action="{{ url_for('task_delete', task_id=view_model.task.id) }}" onsubmit="return confirm('Are you sure?')">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button class="btn btn-outline-danger" type="submit">Delete</button>
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive mt-4">
+    <table class="table table-striped">
+        <thead><tr>
+            {% for label, field in [("User", "username"), ("Date", "date"), ("Price", "price"), ("Payee", "payee"), ("Category", "category"), ("Notes", "notes")] %}
+                <th><a href="{{ view_model.sort_urls[field] }}">{{ label }}</a></th>
+            {% endfor %}
+            <th></th>
+        </tr></thead>
+        <tbody>
+        {% for entry in view_model.entries %}
+            <tr>
+                <td>{{ entry.user.username|title }}</td>
+                <td>{{ entry.entry_date.strftime("%Y-%m-%d") }}</td>
+                <td>${{ "%.2f"|format(entry.price) }}</td>
+                <td>{{ entry.payee or "" }}</td>
+                <td>{{ entry.category or "" }}</td>
+                <td>{{ (entry.notes or "")|truncate(20, true, "...") }}</td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <a class="btn btn-outline-primary" href="{{ url_for('entry_show', entry_id=entry.id) }}">Details</a>
+                        <a class="btn btn-outline-dark" href="{{ url_for('entry_edit', entry_id=entry.id) }}">Edit</a>
+                        <form method="post" action="{{ url_for('entry_delete', entry_id=entry.id) }}" onsubmit="return confirm('Are you sure?')">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button class="btn btn-outline-danger" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="7">No entries found.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% if view_model.pages > 1 %}
+<nav aria-label="Entry pages">
+    <ul class="pagination">
+        {% if view_model.page > 1 %}<li class="page-item"><a class="page-link" href="{{ view_model.page_urls[view_model.page - 1] }}">Previous</a></li>{% endif %}
+        {% for number in view_model.page_numbers %}
+            <li class="page-item {% if number == view_model.page %}active{% endif %}"><a class="page-link" href="{{ view_model.page_urls[number] }}">{{ number }}</a></li>
+        {% endfor %}
+        {% if view_model.page < view_model.pages %}<li class="page-item"><a class="page-link" href="{{ view_model.page_urls[view_model.page + 1] }}">Next</a></li>{% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

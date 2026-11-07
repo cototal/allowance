@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Allowance Entry{% endblock %}
+{% block body %}
+<div class="row"><div class="col-md-6">
+    <table class="table table-striped mt-4">
+        <tr><th>User</th><td>{{ entry.user.username }}</td></tr>
+        <tr><th>Entry Date</th><td>{{ entry.entry_date.strftime("%Y-%m-%d") }}</td></tr>
+        <tr><th>Price</th><td>${{ "%.2f"|format(entry.price) }}</td></tr>
+        <tr><th>Payee</th><td>{{ entry.payee or "" }}</td></tr>
+        <tr><th>Category</th><td>{{ entry.category or "" }}</td></tr>
+        <tr><th>Notes</th><td>{{ entry.notes or "" }}</td></tr>
+    </table>
+    <div class="btn-group">
+        <a class="btn btn-outline-dark" href="{{ url_for('entry_edit', entry_id=entry.id) }}">Edit</a>
+        <form method="post" action="{{ url_for('entry_delete', entry_id=entry.id) }}" onsubmit="return confirm('Are you sure?')">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="btn btn-outline-danger" type="submit">Delete</button>
+        </form>
+    </div>
+</div></div>
+{% endblock %}

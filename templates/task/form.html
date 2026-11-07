@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ view_model.title }}{% endblock %}
+{% block body %}
+<h1>{{ "Create new Task" if not view_model.task else "Edit Task" }}</h1>
+{% for error in view_model.errors %}<div class="alert alert-danger">{{ error }}</div>{% endfor %}
+<form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    {% if view_model.task %}
+    <fieldset class="mb-3">
+        <legend>Days completed</legend>
+        {% for day in view_model.days %}
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="day-{{ loop.index }}" name="days" value="{{ day }}" {% if day in view_model.selected_days %}checked{% endif %}>
+            <label class="form-check-label" for="day-{{ loop.index }}">{{ day }}</label>
+        </div>
+        {% endfor %}
+    </fieldset>
+    {% endif %}
+    <div class="mb-3">
+        <label class="form-label" for="goal">Goal</label>
+        <input class="form-control" id="goal" name="goal" value="{{ view_model.goal }}" required maxlength="255">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="reward">Reward</label>
+        <input class="form-control" id="reward" name="reward" value="{{ view_model.reward }}" required maxlength="255">
+    </div>
+    <button class="btn btn-primary mt-2" type="submit">{{ "Update" if view_model.task else "Save" }}</button>
+</form>
+{% endblock %}
